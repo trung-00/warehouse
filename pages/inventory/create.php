@@ -301,18 +301,21 @@ if ($isSuccess && !empty($reportId)) {
 }
 
 // -------------------------------------------------------------------------
-// NẾU Ở MÀN HÌNH 1: LẤY DANH SÁCH KẾ HOẠCH CÓ TRẠNG THÁI 'Chờ thực hiện'
+// NẾU Ở MÀN HÌNH 1: LẤY DANH SÁCH KẾ HOẠCH KIỂM KÊ
 // -------------------------------------------------------------------------
 $plansList = [];
+$pendingCount = 0;
 if ($mode === 'list') {
     $stmtPlans = $db->query("
         SELECT k.MaKeHoachKiemKe, k.TenKeHoachKiemKe, w.name AS TenKho, k.PhamViKiemKe, k.TrangThai, k.MaKho
         FROM KEHOACH_KIEMKE k
         JOIN warehouses w ON k.MaKho = w.id
-        WHERE k.TrangThai = 'Chờ thực hiện'
-        ORDER BY k.NgayTao DESC, k.MaKeHoachKiemKe ASC
+        ORDER BY CASE WHEN k.TrangThai = 'Chờ thực hiện' THEN 1 ELSE 2 END, k.NgayTao DESC, k.MaKeHoachKiemKe ASC
     ");
     $plansList = $stmtPlans->fetchAll();
+    $pendingCount = count(array_filter($plansList, function($p) {
+        return $p['TrangThai'] === 'Chờ thực hiện';
+    }));
 }
 ?>
 <!DOCTYPE html>
@@ -477,7 +480,7 @@ if ($mode === 'list') {
           <div>
             <span class="status-badge status-processing">
               <i class="fa-solid fa-hourglass-half text-[10px] mr-1"></i>
-              <?= count($plansList) ?> kế hoạch chờ thực hiện
+              <?= $pendingCount ?> kế hoạch chờ thực hiện
             </span>
           </div>
         </div>
@@ -500,7 +503,7 @@ if ($mode === 'list') {
                 <tr>
                   <td colspan="6" class="text-center py-8 text-gray-500 italic">
                     <i class="fa-solid fa-clipboard-check text-2xl text-gray-300 block mb-2"></i>
-                    Hiện không có kế hoạch kiểm kê nào đang chờ thực hiện.
+                    Hiện không có kế hoạch kiểm kê nào.
                   </td>
                 </tr>
               <?php else: ?>
@@ -524,18 +527,34 @@ if ($mode === 'list') {
                       </span>
                     </td>
                     <td>
-                      <span class="status-badge status-waiting">
-                        <i class="fa-solid fa-clock text-[10px] mr-1"></i>
-                        <?= htmlspecialchars($p['TrangThai']) ?>
-                      </span>
+                      <?php if ($p['TrangThai'] === 'Đã thực hiện'): ?>
+                        <span class="status-badge status-approved">
+                          <i class="fa-solid fa-circle-check text-[10px] mr-1"></i>
+                          <?= htmlspecialchars($p['TrangThai']) ?>
+                        </span>
+                      <?php else: ?>
+                        <span class="status-badge status-waiting">
+                          <i class="fa-solid fa-clock text-[10px] mr-1"></i>
+                          <?= htmlspecialchars($p['TrangThai']) ?>
+                        </span>
+                      <?php endif; ?>
                     </td>
-                    <td class="text-right">
-                      <a href="/warehouse/pages/inventory/create.php?plan_id=<?= urlencode($p['MaKeHoachKiemKe']) ?>" 
-                         class="btn-primary" 
-                         style="padding: 6px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>Chọn kế hoạch</span>
-                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                      </a>
+                    <td class="text-right" style="white-space: nowrap;">
+                      <?php if ($p['TrangThai'] === 'Đã thực hiện'): ?>
+                        <button type="button" disabled 
+                                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed inline-flex items-center gap-1.5"
+                                title="Kế hoạch này đã được lập biên bản">
+                          <i class="fa-solid fa-circle-check text-green-600 text-xs"></i>
+                          <span>Đã lập biên bản</span>
+                        </button>
+                      <?php else: ?>
+                        <a href="/warehouse/pages/inventory/create.php?plan_id=<?= urlencode($p['MaKeHoachKiemKe']) ?>" 
+                           class="btn-primary" 
+                           style="padding: 6px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+                          <span>Chọn kế hoạch</span>
+                          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                      <?php endif; ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>

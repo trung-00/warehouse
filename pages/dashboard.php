@@ -73,6 +73,12 @@ try {
       <span>Quản lý kệ kho</span>
     </a>
 
+    <div class="nav-section">Kiểm kê kho</div>
+    <a href="/warehouse/pages/inventory/explain.php" class="nav-item">
+      <i class="fa-solid fa-scale-unbalanced-flip"></i>
+      <span>Giải trình chênh lệch</span>
+    </a>
+
     <div class="nav-section">Sự cố kho</div>
     <a href="/warehouse/pages/incidents/handle.php" class="nav-item">
       <i class="fa-solid fa-screwdriver-wrench"></i>

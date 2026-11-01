@@ -223,6 +223,7 @@ $phamViList = $db->query("SELECT DISTINCT PhamViKiemKe FROM BIENBAN_KIEMKE ORDER
           <label class="font-bold text-gray-700 block mb-1">Trạng thái biên bản:</label>
           <select name="filter_status" class="form-control">
             <option value="">-- Tất cả trạng thái --</option>
+            <option value="Có chênh lệch" <?= $filterStatus === 'Có chênh lệch' ? 'selected' : '' ?>>Có chênh lệch</option>
             <option value="Chờ phê duyệt" <?= $filterStatus === 'Chờ phê duyệt' ? 'selected' : '' ?>>Chờ phê duyệt</option>
             <option value="Đã phê duyệt" <?= $filterStatus === 'Đã phê duyệt' ? 'selected' : '' ?>>Đã phê duyệt</option>
             <option value="Từ chối" <?= $filterStatus === 'Từ chối' ? 'selected' : '' ?>>Từ chối</option>
@@ -289,6 +290,10 @@ $phamViList = $db->query("SELECT DISTINCT PhamViKiemKe FROM BIENBAN_KIEMKE ORDER
                     <?php elseif ($b['TrangThai'] === 'Đã phê duyệt'): ?>
                       <span class="status-badge status-completed">
                         <i class="fa-solid fa-circle-check text-[10px] mr-1"></i>Đã phê duyệt
+                      </span>
+                    <?php elseif ($b['TrangThai'] === 'Có chênh lệch'): ?>
+                      <span class="status-badge status-waiting" style="background: #FEF3C7; color: #92400E; border-color: #F59E0B;">
+                        <i class="fa-solid fa-triangle-exclamation text-[10px] mr-1"></i>Có chênh lệch
                       </span>
                     <?php else: ?>
                       <span class="status-badge status-waiting" style="background: #FEE2E2; color: #991B1B; border-color: #B91C1C;">

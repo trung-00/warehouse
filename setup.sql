@@ -135,9 +135,9 @@ INSERT INTO incidents (
 -- --------------------------------------------------------
 CREATE TABLE notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    recipient_role ENUM('admin', 'manager', 'staff') NOT NULL,
+    recipient_role ENUM('admin', 'manager', 'staff', 'director', 'stocktaking') NOT NULL,
     recipient_id VARCHAR(20) NULL,
-    incident_id VARCHAR(30) NOT NULL,
+    incident_id VARCHAR(30) NULL,
     title VARCHAR(200) NOT NULL,
     message TEXT NOT NULL,
     is_read TINYINT(1) DEFAULT 0,
@@ -379,8 +379,9 @@ CREATE TABLE IF NOT EXISTS CHITIET_KEHOACH_KIEMKE (
     FOREIGN KEY (MaLo) REFERENCES LOHANG(MaLo) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dữ liệu mẫu 3 Kế hoạch kiểm kê Chờ thực hiện
+-- Dữ liệu mẫu Kế hoạch kiểm kê: 3 kế hoạch Chờ thực hiện và 1 kế hoạch Đã thực hiện
 INSERT INTO KEHOACH_KIEMKE (MaKeHoachKiemKe, TenKeHoachKiemKe, PhamViKiemKe, MaKho, TrangThai) VALUES
+('KHKK-10-01', 'Kiểm kê định kỳ Tháng 10 - Kho Thành Phẩm 1', 'Toàn bộ kho', 'KTP01', 'Đã thực hiện'),
 ('KHKK-11-01', 'Kiểm kê định kỳ Kho Thành Phẩm 1', 'Toàn bộ kho', 'KTP01', 'Chờ thực hiện'),
 ('KHKK-11-02', 'Kiểm kê định kỳ Kho Nguyên Liệu 1', 'Nhóm đường và phụ gia', 'KNL01', 'Chờ thực hiện'),
 ('KHKK-11-03', 'Kiểm kê các lô thành phẩm tháng 11', 'Các lô thành phẩm tháng 11', 'KTP01', 'Chờ thực hiện')
@@ -390,8 +391,10 @@ ON DUPLICATE KEY UPDATE
     MaKho = VALUES(MaKho),
     TrangThai = VALUES(TrangThai);
 
--- Dữ liệu mẫu chi tiết các lô hàng cho 3 kế hoạch trên
+-- Dữ liệu mẫu chi tiết các lô hàng cho các kế hoạch trên
 INSERT INTO CHITIET_KEHOACH_KIEMKE (MaKeHoachKiemKe, MaHangHoa, MaLo) VALUES
+('KHKK-10-01', 'HH001', 'LO001'),
+('KHKK-10-01', 'HH002', 'LO002'),
 ('KHKK-11-01', 'HH001', 'LO001'),
 ('KHKK-11-01', 'HH002', 'LO002'),
 ('KHKK-11-01', 'HH003', 'LO003'),
@@ -413,7 +416,7 @@ CREATE TABLE IF NOT EXISTS BIENBAN_KIEMKE (
     MaKho VARCHAR(20) NOT NULL,
     NgayLap DATETIME NOT NULL,
     NguoiLap VARCHAR(100) NOT NULL,
-    TrangThai ENUM('Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối') NOT NULL DEFAULT 'Chờ phê duyệt',
+    TrangThai ENUM('Có chênh lệch', 'Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối') NOT NULL DEFAULT 'Có chênh lệch',
     NguoiDuyet VARCHAR(100) NULL,
     ThoiGianDuyet DATETIME NULL,
     YKienChiDao TEXT NULL,
@@ -436,6 +439,8 @@ CREATE TABLE IF NOT EXISTS CHITIET_BIENBAN_KIEMKE (
     TonHeThong INT NOT NULL,
     ThucTe INT NOT NULL,
     ChenhLech INT NOT NULL,
+    MaNguyenNhan VARCHAR(30) NULL,
+    NoiDungGiaiTrinh TEXT NULL,
     FOREIGN KEY (MaBienBanKiemKe) REFERENCES BIENBAN_KIEMKE(MaBienBanKiemKe) ON DELETE CASCADE,
     FOREIGN KEY (MatHang) REFERENCES HANGHOA(MaHangHoa) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -449,6 +454,22 @@ CREATE TABLE IF NOT EXISTS NGUYENNHAN_CHENHLECH (
     FOREIGN KEY (MaBienBanKiemKe) REFERENCES BIENBAN_KIEMKE(MaBienBanKiemKe) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 19. BẢNG DANH MỤC NGUYÊN NHÂN CHÊNH LỆCH (DANHMUC_NGUYENNHAN)
+CREATE TABLE IF NOT EXISTS DANHMUC_NGUYENNHAN (
+    MaNguyenNhan VARCHAR(30) PRIMARY KEY,
+    TenNguyenNhan VARCHAR(200) NOT NULL,
+    MoTaMacDinh TEXT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO DANHMUC_NGUYENNHAN (MaNguyenNhan, TenNguyenNhan, MoTaMacDinh) VALUES
+('NN_HUHONG', 'Hư hỏng do bốc xếp/vận chuyển', 'Bao bì móp méo, rách vỡ hoặc rò rỉ trong quá trình lưu kho/bốc dỡ'),
+('NN_NHAPLIEU', 'Sai sót nhập liệu sổ sách', 'Chưa kịp thời ghi nhận chứng từ nhập bù hoặc phiếu xuất kho'),
+('NN_HAOHUT', 'Hao hụt tự nhiên / bay hơi', 'Hao hụt định mức theo tính chất vật lý của sản phẩm qua thời gian lưu kho'),
+('NN_THATTHOAT', 'Thất thoát chưa rõ nguyên nhân', 'Thiếu hụt hàng thực tế so với sổ sách, đang rà soát kiểm đếm lại'),
+('NN_TRAHANG', 'Hàng trả về/khuyến mãi chưa cập nhật', 'Hàng khuyến mãi hoặc hàng đổi trả từ khách chưa được ghi vào hệ thống'),
+('NN_KHAC', 'Lý do khác', 'Nguyên nhân đặc thù khác được giải trình chi tiết')
+ON DUPLICATE KEY UPDATE TenNguyenNhan = VALUES(TenNguyenNhan), MoTaMacDinh = VALUES(MoTaMacDinh);
+
 -- Dữ liệu mẫu 6 Biên bản kiểm kê hiện có (Ban Giám Đốc phê duyệt)
 INSERT INTO BIENBAN_KIEMKE (
     MaBienBanKiemKe, MaKeHoachKiemKe, TenKeHoachKiemKe, PhamViKiemKe, MaKho, NgayLap, NguoiLap, TrangThai, NguoiDuyet, ThoiGianDuyet, YKienChiDao, LyDoTuChoi, NoiDungLyDoKhac
@@ -458,7 +479,11 @@ INSERT INTO BIENBAN_KIEMKE (
 ('BBKK-2026-003', 'KHKK-09-01', 'Kế hoạch kiểm kê quý III - Nhóm Nước suối', 'Khu vực kệ A - Kho Thành Phẩm 1', 'KTP01', '2026-09-28 15:45:00', 'Trần Quản Lý', 'Từ chối', 'Nguyễn Giám Đốc', '2026-09-28 17:00:00', NULL, 'Yêu cầu kiểm kê/đếm lại thực tế', NULL),
 ('BBKK-2026-004', 'KHKK-10-02', 'Kế hoạch kiểm kê định kỳ Tháng 10 - Nhóm Nước tăng lực', 'Khu vực kệ C - Kho Thành Phẩm 1', 'KTP01', '2026-10-30 14:20:00', 'Trần Quản Lý', 'Chờ phê duyệt', NULL, NULL, NULL, NULL, NULL),
 ('BBKK-2026-005', 'KHKK-10-03', 'Kế hoạch kiểm kê đột xuất Nước cam ép', 'Khu vực kệ D - Kho Thành Phẩm 1', 'KTP01', '2026-10-29 09:15:00', 'Trần Quản Lý', 'Đã phê duyệt', 'Nguyễn Giám Đốc', '2026-10-29 16:40:00', 'Đồng ý với kết quả kiểm kê. Điều chỉnh sổ sách theo số liệu thực tế.', NULL, NULL),
-('BBKK-2026-006', 'KHKK-10-04', 'Kế hoạch kiểm kê quý IV - Nhóm Bia lon', 'Khu vực kệ E - Kho Thành Phẩm 1', 'KTP01', '2026-10-28 11:00:00', 'Trần Quản Lý', 'Từ chối', 'Nguyễn Giám Đốc', '2026-10-28 17:25:00', 'Yêu cầu kiểm kê lại toàn bộ khu vực kệ E.', 'Khác', 'Biên bản thiếu chữ ký xác nhận của thủ kho và chênh lệch lớn.')
+('BBKK-2026-006', 'KHKK-10-04', 'Kế hoạch kiểm kê quý IV - Nhóm Bia lon', 'Khu vực kệ E - Kho Thành Phẩm 1', 'KTP01', '2026-10-28 11:00:00', 'Trần Quản Lý', 'Từ chối', 'Nguyễn Giám Đốc', '2026-10-28 17:25:00', 'Yêu cầu kiểm kê lại toàn bộ khu vực kệ E.', 'Khác', 'Biên bản thiếu chữ ký xác nhận của thủ kho và chênh lệch lớn.'),
+-- Dữ liệu mẫu các biên bản ở trạng thái "Có chênh lệch" để Quản lý kho giải trình
+('BBKK-2026-008', 'KHKK-11-01', 'Kiểm kê định kỳ Kho Thành Phẩm 1', 'Toàn bộ kho', 'KTP01', '2026-11-01 09:30:00', 'Nguyễn Kiểm Kê', 'Có chênh lệch', NULL, NULL, NULL, NULL, NULL),
+('BBKK-2026-009', 'KHKK-11-02', 'Kiểm kê định kỳ Kho Nguyên Liệu 1', 'Nhóm đường và phụ gia', 'KNL01', '2026-11-01 14:00:00', 'Nguyễn Kiểm Kê', 'Có chênh lệch', NULL, NULL, NULL, NULL, NULL),
+('BBKK-2026-010', 'KHKK-11-03', 'Kiểm kê các lô thành phẩm tháng 11', 'Các lô thành phẩm tháng 11', 'KTP01', '2026-11-01 16:15:00', 'Nguyễn Kiểm Kê', 'Có chênh lệch', NULL, NULL, NULL, NULL, NULL)
 ON DUPLICATE KEY UPDATE 
     TenKeHoachKiemKe = VALUES(TenKeHoachKiemKe),
     TrangThai = VALUES(TrangThai),
@@ -477,7 +502,15 @@ INSERT INTO CHITIET_BIENBAN_KIEMKE (MaBienBanKiemKe, MatHang, TenHang, TenLo, Do
 ('BBKK-2026-004', 'HH001', 'Nước lọc 500ml', 'LO003', 'Chai', 150, 150, 0),
 ('BBKK-2026-005', 'HH001', 'Nước lọc 500ml', 'LO001', 'Chai', 200, 198, -2),
 ('BBKK-2026-005', 'HH002', 'Nước ngọt Cola 330ml', 'LO002', 'Lon', 120, 123, 3),
-('BBKK-2026-006', 'HH002', 'Nước ngọt Cola 330ml', 'LO007', 'Lon', 300, 270, -30)
+('BBKK-2026-006', 'HH002', 'Nước ngọt Cola 330ml', 'LO007', 'Lon', 300, 270, -30),
+('BBKK-2026-008', 'HH001', 'Nước lọc 500ml', 'LO001', 'Chai', 60, 58, -2),
+('BBKK-2026-008', 'HH002', 'Nước ngọt Cola 330ml', 'LO002', 'Lon', 100, 103, 3),
+('BBKK-2026-008', 'HH003', 'Nước lọc 1.5L', 'LO003', 'Chai', 200, 200, 0),
+('BBKK-2026-008', 'HH001', 'Nước lọc 500ml', 'LO004', 'Chai', 100, 95, -5),
+('BBKK-2026-009', 'NVL001', 'Đường tinh luyện', 'LO-NL-01', 'Kg', 350, 345, -5),
+('BBKK-2026-009', 'NVL002', 'Phụ gia thực phẩm', 'LO-NL-02', 'Kg', 50, 52, 2),
+('BBKK-2026-010', 'HH002', 'Nước ngọt Cola 330ml', 'LO005', 'Lon', 20, 18, -2),
+('BBKK-2026-010', 'HH002', 'Nước ngọt Cola 330ml', 'LO006', 'Lon', 80, 85, 5)
 ON DUPLICATE KEY UPDATE TenHang = VALUES(TenHang);
 
 INSERT INTO NGUYENNHAN_CHENHLECH (MaNguyenNhan, MaBienBanKiemKe, TenNguyenNhan, MoTaNguyenNhan) VALUES
