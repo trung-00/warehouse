@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <!-- Badge background -->
+  <rect width="32" height="32" rx="6" fill="#B91C1C"/>
+  <!-- Warehouse Roof -->
+  <path d="M16 6L6 13V26H26V13L16 6Z" fill="#FFFFFF"/>
+  <!-- Overhang line -->
+  <path d="M4 13.5L16 5L28 13.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Warehouse Rolling Shutter Door -->
+  <rect x="12" y="16" width="8" height="10" rx="1" fill="#1F2937"/>
+  <!-- Shutter slats -->
+  <line x1="13.5" y1="19" x2="18.5" y2="19" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="13.5" y1="21.5" x2="18.5" y2="21.5" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="13.5" y1="24" x2="18.5" y2="24" stroke="#FFFFFF" stroke-width="0.8"/>
+</svg>
+

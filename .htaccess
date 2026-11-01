@@ -1,0 +1,24 @@
+# Quản Lý Kho - URL Rewriting & Tương thích ngược
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /warehouse/
+
+    # Chuyển hướng tài nguyên CSS cũ sang assets/css/
+    RewriteRule ^css/(.*)$ assets/css/$1 [L,QSA]
+
+    # Chuyển hướng các URL cũ sang cấu trúc thư mục mới gọn gàng
+    RewriteRule ^pages/admin_accounts\.php$ pages/accounts/index.php [R=301,L,QSA]
+    RewriteRule ^pages/incident_report\.php$ pages/incidents/report.php [R=301,L,QSA]
+    RewriteRule ^pages/incident_handle\.php$ pages/incidents/handle.php [R=301,L,QSA]
+    RewriteRule ^pages/shelves/shelf_list\.php$ pages/shelves/index.php [R=301,L,QSA]
+    RewriteRule ^pages/export/request_list\.php$ pages/export/index.php [R=301,L,QSA]
+    RewriteRule ^pages/export/create_export\.php$ pages/export/create.php [R=301,L,QSA]
+    RewriteRule ^pages/inventory/audit_list\.php$ pages/inventory/index.php [R=301,L,QSA]
+    RewriteRule ^pages/inventory/audit_detail\.php$ pages/inventory/detail.php [R=301,L,QSA]
+
+    # Các lối tắt tiện lợi từ thư mục gốc
+    RewriteRule ^export/?$ pages/export/index.php [R=301,L]
+    RewriteRule ^shelves/?$ pages/shelves/index.php [R=301,L]
+    RewriteRule ^inventory/?$ pages/inventory/index.php [R=301,L]
+</IfModule>
+

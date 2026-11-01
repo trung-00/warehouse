@@ -1,0 +1,101 @@
+/* Assets/css/login.css
+   Bảng màu:
+   - Đỏ đậm (Nhấn): #B91C1C
+   - Trắng (Nền chính): #FFFFFF
+   - Xám nhạt (Nền trang): #F3F4F6
+   - Xám đậm (Chữ): #1F2937
+   - Phông chữ: Arial, sans-serif
+   - Không đổ bóng
+*/
+
+* {
+  box-sizing: border-box;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+  font-family: Arial, sans-serif;
+}
+
+/* Đảm bảo Font Awesome hiển thị chính xác, không bị Arial ghi đè */
+.fa, .fas, .fa-solid, .far, .fa-regular, .fab, .fa-brands, [class*="fa-"] {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+.logo-badge {
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  background-color: #B91C1C;
+}
+
+.logo-icon {
+  color: #FFFFFF;
+  font-size: 24px;
+}
+
+.kv-input {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: #1F2937;
+  background: #FFFFFF;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.kv-input:focus {
+  border-color: #B91C1C;
+  border-width: 2px;
+  padding: 9px 13px 9px 37px;
+}
+
+.kv-input::placeholder {
+  color: #9CA3AF;
+}
+
+.kv-btn {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #B91C1C;
+  border-radius: 6px;
+  background: #B91C1C;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.kv-btn:hover {
+  background: #991B1B;
+  border-color: #991B1B;
+}
+
+.link-accent {
+  color: #B91C1C;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  text-decoration: none;
+}
+
+.link-accent:hover {
+  text-decoration: underline;
+}

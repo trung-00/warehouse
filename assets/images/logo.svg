@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Background rounded badge -->
+  <rect width="64" height="64" rx="12" fill="#B91C1C"/>
+  <!-- Warehouse Roof / Isometric Top -->
+  <path d="M32 13L50 23L32 33L14 23L32 13Z" fill="#FFFFFF"/>
+  <!-- Left Wall -->
+  <path d="M14 23L32 33V51L14 41V23Z" fill="#E5E7EB"/>
+  <!-- Right Wall -->
+  <path d="M50 23L32 33V51L50 41V23Z" fill="#D1D5DB"/>
+  <!-- Warehouse Bay Door (Left & Right) -->
+  <path d="M20 37.5L27 41.5V48L20 44V37.5Z" fill="#1F2937"/>
+  <path d="M37 41.5L44 37.5V44L37 48V41.5Z" fill="#1F2937"/>
+  <!-- Horizontal Gate Slats -->
+  <line x1="20" y1="40" x2="27" y2="44" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="37" y1="44" x2="44" y2="40" stroke="#FFFFFF" stroke-width="1"/>
+  <!-- Center Accent Roof Ridge -->
+  <path d="M32 13L41 18L32 23L23 18L32 13Z" fill="#FEE2E2"/>
+</svg>
+
