@@ -263,7 +263,7 @@ if (!empty($viewId)) {
         LEFT JOIN CHITIET_BIENBAN_KIEMKE ct ON b.MaBienBanKiemKe = ct.MaBienBanKiemKe
         WHERE " . implode(" AND ", $whereClauses) . "
         GROUP BY b.MaBienBanKiemKe
-        ORDER BY b.NgayLap DESC
+        ORDER BY b.NgayLap DESC, b.MaBienBanKiemKe ASC
     ";
 
     $stmtList = $db->prepare($sql);
@@ -537,7 +537,7 @@ if (!empty($viewId)) {
                       </span>
                     </td>
                     <td class="text-gray-700">
-                      <?= date('d/m/Y H:i', strtotime($row['NgayLap'])) ?>
+                      <?= date('d/m/Y', strtotime($row['NgayLap'])) ?>
                     </td>
                     <td>
                       <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-300 rounded text-xs font-bold">
@@ -603,13 +603,13 @@ if (!empty($viewId)) {
         <div class="p-5 border-b border-gray-200 bg-white">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
             <div>
-              <label class="block font-bold text-gray-600 mb-1">Kho kiểm kê:</label>
+              <label class="block font-bold text-gray-600 mb-1">Kho:</label>
               <select disabled class="form-control w-full bg-gray-100 text-gray-800 cursor-not-allowed font-medium">
-                <option selected><?= htmlspecialchars($currentAudit['TenKho']) ?> (<?= htmlspecialchars($currentAudit['MaKho']) ?>)</option>
+                <option selected><?= htmlspecialchars($currentAudit['TenKho']) ?></option>
               </select>
             </div>
             <div>
-              <label class="block font-bold text-gray-600 mb-1">Ngày kiểm kê:</label>
+              <label class="block font-bold text-gray-600 mb-1">Ngày:</label>
               <input type="date" disabled class="form-control w-full bg-gray-100 text-gray-800 cursor-not-allowed font-medium" 
                      value="<?= date('Y-m-d', strtotime($currentAudit['NgayLap'])) ?>" />
             </div>
