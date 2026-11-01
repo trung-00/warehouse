@@ -88,6 +88,14 @@ try {
     </a>
     <?php endif; ?>
 
+    <?php if ($user['role'] === 'stocktaking'): ?>
+    <div class="nav-section">Kiểm kê kho</div>
+    <a href="/warehouse/pages/inventory/create.php" class="nav-item">
+      <i class="fa-solid fa-clipboard-check"></i>
+      <span>Lập biên bản kiểm kê</span>
+    </a>
+    <?php endif; ?>
+
     <?php if ($user['role'] === 'admin'): ?>
     <div class="nav-section">Hệ thống</div>
     <a href="/warehouse/pages/accounts/index.php" class="nav-item">

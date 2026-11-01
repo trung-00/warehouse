@@ -53,20 +53,22 @@ function getCurrentUser() {
 
 function getRoleLabel($role) {
     $labels = [
-        'admin'    => 'Quản trị viên',
-        'manager'  => 'Quản lý kho',
-        'staff'    => 'Nhân viên kho',
-        'director' => 'Ban Giám Đốc',
+        'admin'       => 'Quản trị viên',
+        'manager'     => 'Quản lý kho',
+        'staff'       => 'Nhân viên kho',
+        'director'    => 'Ban Giám Đốc',
+        'stocktaking' => 'Bộ phận kiểm kê',
     ];
     return $labels[$role] ?? $role;
 }
 
 function getRoleBadgeClass($role) {
     $classes = [
-        'admin'    => 'badge-role-admin',
-        'manager'  => 'badge-role-manager',
-        'staff'    => 'badge-role-staff',
-        'director' => 'badge-role-director',
+        'admin'       => 'badge-role-admin',
+        'manager'     => 'badge-role-manager',
+        'staff'       => 'badge-role-staff',
+        'director'    => 'badge-role-director',
+        'stocktaking' => 'badge-role-stocktaking',
     ];
     return $classes[$role] ?? 'badge-role-staff';
 }
@@ -85,6 +87,18 @@ function isAdmin() {
 
 function isDirector() {
     return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'director';
+}
+
+function isStocktaking() {
+    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'stocktaking';
+}
+
+function requireStocktaking() {
+    requireLogin();
+    if (!isStocktaking()) {
+        header('Location: /warehouse/pages/dashboard.php');
+        exit;
+    }
 }
 
 function requireDirector() {

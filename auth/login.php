@@ -151,6 +151,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <span>Ban Giám Đốc: <strong class="text-gray-900">giamdoc</strong> (Nguyễn Giám Đốc)</span>
           <span class="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200">Duyệt kiểm kê</span>
         </div>
+        <div class="flex justify-between items-center py-0.5 border-b border-gray-100">
+          <span>Bộ phận kiểm kê: <strong class="text-gray-900">kiemke</strong> (Nguyễn Kiểm Kê)</span>
+          <span class="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-200">Lập biên bản</span>
+        </div>
         <div class="flex justify-between items-center py-0.5">
           <span>Quản trị viên: <strong class="text-gray-900">admin</strong></span>
           <span class="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded border border-red-200">Quản lý tài khoản</span>

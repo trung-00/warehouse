@@ -404,6 +404,12 @@ $nguyenNhanList = $stmtNN->fetchAll();
           <span class="text-gray-500 font-bold block mb-1">Ngày lập biên bản:</span>
           <span class="text-sm font-bold text-gray-800"><?= date('d/m/Y H:i', strtotime($bienBan['NgayLap'])) ?></span>
         </div>
+        <?php if (!empty($bienBan['GhiChu'])): ?>
+        <div class="p-3 bg-gray-50 rounded border border-gray-200 md:col-span-4">
+          <span class="text-gray-500 font-bold block mb-1">Ghi chú kiểm kê:</span>
+          <span class="text-xs italic text-gray-800 whitespace-pre-wrap"><?= htmlspecialchars($bienBan['GhiChu']) ?></span>
+        </div>
+        <?php endif; ?>
       </div>
 
       <?php if (!empty($bienBan['NguoiDuyet'])): ?>
